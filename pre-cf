@@ -8,19 +8,19 @@
 #  hangs when an IamInstanceProfile property is 
 #  included in the template. 
 
-aws cloudformation create-stack --stack-name 4b --template-body file://cf.yaml --region us-west-2
+TMP=/tmp/pre-cf
+
+aws cloudformation create-stack --stack-name pfeiffer4b --template-body file://cf.yaml --region us-west-2                                        &> $TMP-1000
+
+sleep 180
 
 for i in $(aws ec2 describe-instances --region us-west-2 --output text \
   --query '[Reservations[].Instances[].[InstanceId]]' \
   --filters 'Name=instance-state-name,Values=running' \
             'Name=tag-value,Values=*Dev4*'); do
-  aws ec2 associate-iam-instance-profile --instance-id $i --iam-instance-profile Name=CDInstanceRole --region us-west-2
-  echo $i
+  aws ec2 associate-iam-instance-profile --instance-id $i --iam-instance-profile Name=CDInstanceRole --region us-west-2                  &> $TMP-110$i #s/m: CD4InstanceProfile
+  aws ec2 stop-instances --region us-west-2 --instance-i $i &> $TMP-120$i
+  sleep 60                                       &> $TMP-1300$i
+  aws ec2 start-instances --region us-west-2 --instance-i $i &> $TMP-140$i
 done
-
-aws ec2 stop-instances --region us-west-2 --instance-id `aws ec2 describe-instances --region us-west-2 | jq '.Reservations | .[] | select((.Instances[].Tags[].Value | contains("Dev4"))) | .Instances | .[].InstanceId' | sed s/\"//g` #stop-Dev4
-
-sleep 60
-
-aws ec2 start-instances --region us-west-2 --instance-id `aws ec2 describe-instances --region us-west-2 | jq '.Reservations | .[] | select((.Instances[].Tags[].Value | contains("Dev4"))) | .Instances | .[].InstanceId' | sed s/\"//g` #start-Dev4
 
