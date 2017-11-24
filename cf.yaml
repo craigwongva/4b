@@ -3,6 +3,7 @@ Resources:
   CD4ServiceRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: CD4ServiceRole
       ManagedPolicyArns:
       - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
       AssumeRolePolicyDocument:

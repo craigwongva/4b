@@ -14,4 +14,4 @@ Resources:
       - Key: Name
         Value: Dev4
         Type: KEY_AND_VALUE
-      ServiceRoleArn: "arn:aws:iam::994238729631:role/pfeiffer4b-CD4ServiceRole-29SS21ODZ0WI"
+      ServiceRoleArn: "arn:aws:iam::994238729631:role/CD4ServiceRole"

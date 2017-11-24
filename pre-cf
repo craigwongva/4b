@@ -24,3 +24,12 @@ for i in $(aws ec2 describe-instances --region us-west-2 --output text \
   aws ec2 start-instances --region us-west-2 --instance-i $i &> $TMP-140$i
 done
 
+aws cloudformation create-stack --stack-name pfeiffer4b2 --template-body file://cf2.yaml --region us-west-2
+
+sleep 60
+
+aws cloudformation create-stack --stack-name pfeiffer4b3 --template-body file://cf3.yaml --region us-west-2 --parameters ParameterKey=githubpassword,ParameterValue=$1aws cloudformation create-stack --stack-name pfeiffer4b2 --template-body file://cf2.yaml --region us-west-2
+
+sleep 60
+
+aws cloudformation create-stack --stack-name pfeiffer4b3 --template-body file://cf3.yaml --region us-west-2 --parameters ParameterKey=githubpassword,ParameterValue=$1
