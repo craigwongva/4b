@@ -1,0 +1,5 @@
+TMP=/tmp/userdata
+
+#Set up start instance.
+cd ~/4b                                            &> $TMP-1000
+sudo cp rc.local /etc/rc.d/rc.local                &> $TMP-1200
