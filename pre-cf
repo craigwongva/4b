@@ -10,7 +10,7 @@
 
 TMP=/tmp/pre-cf
 
-aws cloudformation create-stack --stack-name pfeiffer4b --template-body file://cf.yaml --region us-west-2                                        &> $TMP-1000
+aws cloudformation create-stack --stack-name pfeiffer4b --capabilities CAPABILITY_IAM --template-body file://cf.yaml --region us-west-2                                        &> $TMP-1000
 
 sleep 180
 
