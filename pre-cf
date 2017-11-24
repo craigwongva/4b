@@ -1,0 +1,21 @@
+# Run this from any instance that:
+# * has jq installed
+# * has AWS CLI privileges.
+
+# This file is a workaround, rather than creating
+#  a CloudFormation stack directly.
+# This workaround is necessary because CloudFormation
+#  hangs when an IamInstanceProfile property is 
+#  included in the template. 
+
+#TODO: here insert a cloudformation command
+
+#TODO: create a loop
+aws-cli aws ec2 associate-iam-instance-profile --instance-id `aws ec2 describe-instances --region us-west-2 | jq '.Reservations | .[] | select((.Instances[].Tags[].Value | contains("Dev4"))) | .Instances | .[].InstanceId' | sed s/\"//g` --iam-instance-profile Name=CDInstanceRole --region us-west-2
+
+aws ec2 stop-instances --region us-west-2 --instance-id `aws ec2 describe-instances --region us-west-2 | jq '.Reservations | .[] | select((.Instances[].Tags[].Value | contains("Dev4"))) | .Instances | .[].InstanceId' | sed s/\"//g` #stop-Dev4
+
+sleep 60
+
+aws ec2 start-instances --region us-west-2 --instance-id `aws ec2 describe-instances --region us-west-2 | jq '.Reservations | .[] | select((.Instances[].Tags[].Value | contains("Dev4"))) | .Instances | .[].InstanceId' | sed s/\"//g` #start-Dev4
+

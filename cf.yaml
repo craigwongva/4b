@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  4c:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: vpc-a0383dc5
+      GroupDescription: 4c
+      SecurityGroupIngress:
+      -
+        CidrIp: 0.0.0.0/0
+        FromPort: 22
+        IpProtocol: tcp
+        ToPort: 22
+      -
+        CidrIp: 0.0.0.0/0
+        FromPort: 80
+        IpProtocol: tcp
+        ToPort: 80
+  MyInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: oregonkeypair
+      SecurityGroupIds:
+      - !Ref 4c
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum install -y git
+          sudo -u ec2-user bash -c 'cd /home/ec2-user; git clone https://github.com/craigwongva/4b.git'
+          sudo -u ec2-user bash -c '/home/ec2-user/4b/userdata'
+      InstanceType: t2.micro
+      ImageId: ami-32d8124a
+      Tags:
+        -
+          Key: Name
+          Value: Dev4
