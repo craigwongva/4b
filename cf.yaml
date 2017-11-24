@@ -35,6 +35,7 @@ Resources:
     Properties:
       Roles:
         - CD2InstanceRole
+      InstanceProfileName: CD5InstanceProfile
   4c:
     Type: AWS::EC2::SecurityGroup
     Properties:
