@@ -1,0 +1,88 @@
+# Run this script with one parm, a GitHub access key.
+
+# The roleArn was created manually on the Console
+#  in the CodePipeline service.
+
+# The artifactStore S3 bucket was an output of a previous
+#  manual CodePipeline run. I don't know if it's secure
+#  to continue using that bucket.
+
+# This pipeline json was derived by a CLI get-pipeline
+#  output from a manually created pipeline.
+
+cat <<- EOF > pipeline.json
+{
+   "pipeline":{
+      "roleArn":"arn:aws:iam::994238729631:role/AWS-CodePipeline-Service",
+      "stages":[
+         {
+            "name":"Source",
+            "actions":[
+               {
+                  "inputArtifacts":[
+
+                  ],
+                  "name":"Source",
+                  "actionTypeId":{
+                     "category":"Source",
+                     "owner":"ThirdParty",
+                     "version":"1",
+                     "provider":"GitHub"
+                  },
+                  "outputArtifacts":[
+                     {
+                        "name":"MyApp"
+                     }
+                  ],
+                  "configuration":{
+                     "Owner":"craigwongva",
+                     "Repo":"aws-code-deploy-linux",
+                     "PollForSourceChanges":"true",
+                     "Branch":"master",
+                     "OAuthToken":"REPLACEME"
+                  },
+                  "runOrder":1
+               }
+            ]
+         },
+         {
+            "name":"Staging",
+            "actions":[
+               {
+                  "inputArtifacts":[
+                     {
+                        "name":"MyApp"
+                     }
+                  ],
+                  "name":"DemoAppInstances",
+                  "actionTypeId":{
+                     "category":"Deploy",
+                     "owner":"AWS",
+                     "version":"1",
+                     "provider":"CodeDeploy"
+                  },
+                  "outputArtifacts":[
+
+                  ],
+                  "configuration":{
+                     "ApplicationName":"DemoApp",
+                     "DeploymentGroupName":"DemoAppInstances"
+                  },
+                  "runOrder":1
+               }
+            ]
+         }
+      ],
+      "artifactStore":{
+         "type":"S3",
+         "location":"codepipeline-us-west-2-510060297905"
+      },
+      "name":"TexasPipeline",
+      "version":1
+   }
+}
+EOF
+
+sed -i "s/REPLACEME/$1/" pipeline.json
+
+aws codepipeline create-pipeline --region us-west-2 --cli-input-json file://pipeline.json

@@ -1,0 +1,24 @@
+cat <<- EOF > userdata
+#!/bin/bash
+yum install -y aws-cli
+cd /home/ec2-user/
+aws s3 cp 's3://aws-codedeploy-us-east-1/latest/codedeploy-agent.noarch.rpm' . --region us-east-1
+yum -y install codedeploy-agent.noarch.rpm
+EOF
+
+aws ec2 delete-security-group --group-name 4b --region us-west-2
+
+SECGRP=`aws ec2 create-security-group --group-name 4b --vpc vpc-a0383dc5 --region us-west-2 --description 4b --output text`
+
+aws ec2 authorize-security-group-ingress --group-id $SECGRP --cidr 0.0.0.0/0 --port 80 --protocol tcp --region us-west-2
+
+#The userdata was passed to the instances, but did not execute :(
+instanceId=`aws ec2 run-instances --image-id ami-32d8124a --count 2 --instance-type t2.micro --key-name oregonkeypair --security-group-ids $SECGRP --associate-public-ip-address --query 'Instances[0].InstanceId' --output text --user-data file://userdata --region us-west-2`
+
+sleep 15
+
+#TODO: Add for loop the next two lines, per ec2 instance:
+aws ec2 create-tags --resources $instanceId --tags Key=Name,Value=Dev --region us-west-2
+aws ec2 associate-iam-instance-profile --instance-id $instanceId --iam-instance-profile Name=CDInstanceRole --region us-west-2
+
+rm userdata

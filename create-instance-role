@@ -1,0 +1,14 @@
+echo { \"Version\": \"2012-10-17\", \"Statement\": { \"Effect\": \"Allow\", \"Principal\": {\"Service\": \"ec2.amazonaws.com\"}, \"Action\": \"sts:AssumeRole\" } } > instancerole
+
+aws iam create-role --role-name CD2InstanceRole --assume-role-policy-document file://instancerole
+
+aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy --role-name CD2InstanceRole
+
+aws iam create-instance-profile --instance-profile-name CDInstanceRole
+
+aws iam add-role-to-instance-profile --instance-profile-name CDInstanceRole --role-name CD2InstanceRole
+
+rm instancerole
+
+#When creating an EC2 instance via run-instances, you will need to choose CDInstanceRole not CD2InstanceRole.
+

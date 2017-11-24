@@ -1,0 +1,5 @@
+echo { \"Version\": \"2012-10-17\", \"Statement\": { \"Effect\": \"Allow\", \"Principal\": {\"Service\": \"codedeploy.amazonaws.com\"}, \"Action\": \"sts:AssumeRole\" } } > servicerole
+
+aws iam create-role --role-name CDServiceRole --assume-role-policy-document file://servicerole
+
+aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole --role-name CDServiceRole

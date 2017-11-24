@@ -1,0 +1,5 @@
+aws deploy create-application --application-name DemoApp  --region us-west-2 --output text
+
+ACCOUNT=`aws sts get-caller-identity --output text --query Account`
+
+aws deploy create-deployment-group --application-name DemoApp --deployment-group-name DemoAppInstances --ec2-tag-filters Key=Name,Value=Dev,Type=KEY_AND_VALUE --deployment-config-name CodeDeployDefault.AllAtOnce --service-role-arn arn:aws:iam::$ACCOUNT:role/CDServiceRole --region us-west-2
