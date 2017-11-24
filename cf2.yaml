@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  myCodeDeployApp:
+    Type: "AWS::CodeDeploy::Application"
+    Properties:
+      ApplicationName: Demo4App
+  myCodeDeploymentGroup:
+    Type: "AWS::CodeDeploy::DeploymentGroup"
+    Properties:
+      ApplicationName: Demo4App
+      DeploymentConfigName: CodeDeployDefault.AllAtOnce
+      DeploymentGroupName: DemoAppInstances
+      Ec2TagFilters:
+      - Key: Name
+        Value: Dev4
+        Type: KEY_AND_VALUE
+      ServiceRoleArn: "arn:aws:iam::994238729631:role/pfeiffer4b-CD4ServiceRole-29SS21ODZ0WI"
