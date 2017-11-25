@@ -10,26 +10,22 @@
 
 TMP=/tmp/pre-cf
 
-aws cloudformation create-stack --stack-name pfeiffer4b --capabilities CAPABILITY_NAMED_IAM --template-body file://cf.yaml --region us-west-2                                        &> $TMP-1000
+aws cloudformation create-stack --stack-name pfeiffer4b --capabilities CAPABILITY_NAMED_IAM --template-body file://cf.yaml --region us-west-2  --parameters ParameterKey=githubpassword,ParameterValue=$1                                      &> $TMP-1000
 
-sleep 180
+#sleep 180
 
-for i in $(aws ec2 describe-instances --region us-west-2 --output text \
-  --query '[Reservations[].Instances[].[InstanceId]]' \
-  --filters 'Name=instance-state-name,Values=running' \
-            'Name=tag-value,Values=*Dev4*'); do
-  aws ec2 associate-iam-instance-profile --instance-id $i --iam-instance-profile Name=CD5InstanceProfile --region us-west-2                  &> $TMP-110$i
-  aws ec2 stop-instances --region us-west-2 --instance-i $i &> $TMP-120$i
-  sleep 60                                       &> $TMP-1300$i
-  aws ec2 start-instances --region us-west-2 --instance-i $i &> $TMP-140$i
-done
+#for i in $(aws ec2 describe-instances --region us-west-2 --output text \
+#  --query '[Reservations[].Instances[].[InstanceId]]' \
+#  --filters 'Name=instance-state-name,Values=running' \
+#            'Name=tag-value,Values=*Dev4*'); do
+#  aws ec2 associate-iam-instance-profile --instance-id $i --iam-instance-profile Name=CD5InstanceProfile --region us-west-2                  &> $TMP-110$i
+#  aws ec2 stop-instances --region us-west-2 --instance-i $i &> $TMP-120$i
+#  sleep 60                                       &> $TMP-1300$i
+#  aws ec2 start-instances --region us-west-2 --instance-i $i &> $TMP-140$i
+#done
 
-aws cloudformation create-stack --stack-name pfeiffer4b2 --template-body file://cf2.yaml --region us-west-2
-
-sleep 60
-
-aws cloudformation create-stack --stack-name pfeiffer4b3 --template-body file://cf3.yaml --region us-west-2 --parameters ParameterKey=githubpassword,ParameterValue=$1aws cloudformation create-stack --stack-name pfeiffer4b2 --template-body file://cf2.yaml --region us-west-2
-
-sleep 60
-
-aws cloudformation create-stack --stack-name pfeiffer4b3 --template-body file://cf3.yaml --region us-west-2 --parameters ParameterKey=githubpassword,ParameterValue=$1
+#aws cloudformation create-stack \
+#  --stack-name pfeiffer4b2 \
+#  --template-body file://cf2.yaml \
+#  --region us-west-2 \
+#  --parameters ParameterKey=githubpassword,ParameterValue=$1
