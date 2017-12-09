@@ -76,8 +76,8 @@ Resources:
           Key: Name
           Value: Dev4
 #          yum install -y git
-#          sudo -u ec2-user bash -c 'cd /home/ec2-user; git clone https://github.com/craigwongva/4b.git'
-#          sudo -u ec2-user bash -c '/home/ec2-user/4b/userdata'
+#          sudo -u ec2-user bash -c 'cd /home/ec2-user; git clone https://github.com/craigwongva/pfeiffer4gettingstarted.git'
+#          sudo -u ec2-user bash -c '/home/ec2-user/pfeiffer4gettingstarted/userdata'
   myCodeDeployApp:
     Type: "AWS::CodeDeploy::Application"
     Properties:
