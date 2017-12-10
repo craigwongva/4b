@@ -1,5 +1,5 @@
 Usage:
-aws cloudformation create-stack --stack-name pfeifferpfeiffer4gettingstarted --capabilities CAPABILITY_NAMED_IAM --template-body file://cf.yaml --region us-west-2  --parameters ParameterKey=githubpassword,ParameterValue=REDACTED
+aws cloudformation create-stack --stack-name pfeiffer4gettingstarted --capabilities CAPABILITY_NAMED_IAM --template-body file://cf.yaml --region us-west-2  --parameters ParameterKey=githubpassword,ParameterValue=REDACTED
 
 Notes:
 - The stack name means this:
