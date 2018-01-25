@@ -1,6 +1,8 @@
 Usage:
 aws cloudformation create-stack --stack-name pfeiffer4gettingstarted --capabilities CAPABILITY_NAMED_IAM --template-body file://cf.yaml --region us-west-2  --parameters ParameterKey=githubpassword,ParameterValue=REDACTED
 
+Then just type the IP (default port 80) to see a plain HTML page.
+
 Notes:
 - The stack name means this:
   - Pfeiffer is the author of the Pluralsight AWS Devops Exam class.
